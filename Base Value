@@ -1,0 +1,183 @@
+-- Membuat ScreenGui Utama
+local ScreenGui = Instance.new("ScreenGui")
+local MainFrame = Instance.new("Frame")
+local UICorner = Instance.new("UICorner")
+local Title = Instance.new("TextLabel")
+local Subtitle = Instance.new("TextLabel")
+
+-- Variabel Input Form
+local InputHarga = Instance.new("TextBox")
+local InputX = Instance.new("TextBox")
+local InputTarget = Instance.new("TextBox")
+
+-- Kotak Hasil (Result Box)
+local ResultBox = Instance.new("Frame")
+local ResultCorner = Instance.new("UICorner")
+local ResultTitle = Instance.new("TextLabel")
+local ResultValue = Instance.new("TextLabel")
+local LeftBorder = Instance.new("Frame")
+
+-- Teks Footer @kimungs & Tombol Close
+local Footer = Instance.new("TextLabel")
+local CloseButton = Instance.new("TextButton")
+
+-- Mengarahkan ke PlayerGui agar kompatibel dengan Delta Mobile
+ScreenGui.Name = "KalkulatorBaseValueFix"
+ScreenGui.Parent = game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui")
+ScreenGui.ResetOnSpawn = false
+
+-- Properti Frame Utama (Responsif Mobile)
+MainFrame.Name = "MainFrame"
+MainFrame.Parent = ScreenGui
+MainFrame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+MainFrame.Position = UDim2.new(0.5, -135, 0.5, -200)
+MainFrame.Size = UDim2.new(0, 270, 0, 400)
+MainFrame.Active = true
+MainFrame.Draggable = true -- Bisa digeser di layar HP Anda
+
+UICorner.CornerRadius = UDim.new(0, 12)
+UICorner.Parent = MainFrame
+
+-- Judul Utama (h2)
+Title.Parent = MainFrame
+Title.BackgroundTransparency = 1
+Title.Position = UDim2.new(0, 0, 0, 15)
+Title.Size = UDim2.new(1, 0, 0, 25)
+Title.Font = Enum.Font.SourceSansBold
+Title.Text = "🍎 Kalkulator Base Value"
+Title.TextColor3 = Color3.fromRGB(231, 76, 60)
+Title.TextSize = 20
+
+-- Subjudul (desc)
+Subtitle.Parent = MainFrame
+Subtitle.BackgroundTransparency = 1
+Subtitle.Position = UDim2.new(0, 10, 0, 40)
+Subtitle.Size = UDim2.new(1, -20, 0, 20)
+Subtitle.Font = Enum.Font.SourceSans
+Subtitle.Text = "Menghitung base value secara otomatis."
+Subtitle.TextColor3 = Color3.fromRGB(127, 140, 141)
+Subtitle.TextSize = 12
+
+-- Fungsi Pembantu untuk Membuat Form Input sesuai Desain CSS HTML
+local function createInputField(labelName, defaultVal, posY)
+    local label = Instance.new("TextLabel")
+    label.Parent = MainFrame
+    label.BackgroundTransparency = 1
+    label.Position = UDim2.new(0, 20, 0, posY)
+    label.Size = UDim2.new(1, -40, 0, 15)
+    label.Font = Enum.Font.SourceSansBold
+    label.Text = labelName
+    label.TextColor3 = Color3.fromRGB(44, 62, 80)
+    label.TextSize = 13
+    label.TextXAlignment = Enum.TextXAlignment.Left
+
+    local input = Instance.new("TextBox")
+    input.Parent = MainFrame
+    input.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    input.Position = UDim2.new(0, 20, 0, posY + 18)
+    input.Size = UDim2.new(1, -40, 0, 30)
+    input.Font = Enum.Font.SourceSans
+    input.Text = defaultVal
+    input.TextColor3 = Color3.fromRGB(44, 62, 80)
+    input.TextSize = 15
+    
+    local inputCorner = Instance.new("UICorner")
+    inputCorner.CornerRadius = UDim.new(0, 6)
+    inputCorner.Parent = input
+
+    local stroke = Instance.new("UIStroke")
+    stroke.Color = Color3.fromRGB(220, 221, 225)
+    stroke.Thickness = 1.5
+    stroke.Parent = input
+
+    input.Focused:Connect(function() stroke.Color = Color3.fromRGB(231, 76, 60) end)
+    input.FocusLost:Connect(function() stroke.Color = Color3.fromRGB(220, 221, 225) end)
+
+    return input
+end
+
+-- Membuat Elemen Input Form (Sesuai Struktur HTML Anda)
+InputHarga = createInputField("Value Inventory :", "1000", 75)
+InputX = createInputField("Value X Saat Ini :", "0.50", 135)
+InputTarget = createInputField("Base Value X1 :", "1", 205)
+
+-- Pengaturan Kotak Hasil (Result Box)
+ResultBox.Parent = MainFrame
+ResultBox.BackgroundColor3 = Color3.fromRGB(255, 245, 245)
+ResultBox.Position = UDim2.new(0, 20, 0, 270)
+ResultBox.Size = UDim2.new(1, -40, 0, 60)
+
+ResultCorner.CornerRadius = UDim.new(0, 4)
+ResultCorner.Parent = ResultBox
+
+LeftBorder.Parent = ResultBox
+LeftBorder.BackgroundColor3 = Color3.fromRGB(231, 76, 60)
+LeftBorder.Size = UDim2.new(0, 4, 1, 0)
+LeftBorder.BorderSizePixel = 0
+
+ResultTitle.Parent = ResultBox
+ResultTitle.BackgroundTransparency = 1
+ResultTitle.Position = UDim2.new(0, 12, 0, 8)
+ResultTitle.Size = UDim2.new(1, -20, 0, 12)
+ResultTitle.Font = Enum.Font.SourceSansBold
+ResultTitle.Text = "TOTAL BASE VALUE X1"
+ResultTitle.TextColor3 = Color3.fromRGB(127, 140, 141)
+ResultTitle.TextSize = 11
+ResultTitle.TextXAlignment = Enum.TextXAlignment.Left
+
+ResultValue.Parent = ResultBox
+ResultValue.BackgroundTransparency = 1
+ResultValue.Position = UDim2.new(0, 12, 0, 22)
+ResultValue.Size = UDim2.new(1, -20, 0, 30)
+ResultValue.Font = Enum.Font.SourceSansBold
+ResultValue.Text = "2000.00"
+ResultValue.TextColor3 = Color3.fromRGB(231, 76, 60)
+ResultValue.TextSize = 22
+ResultValue.TextXAlignment = Enum.TextXAlignment.Left
+
+-- Teks Footer @kimungs
+Footer.Parent = MainFrame
+Footer.BackgroundTransparency = 1
+Footer.Position = UDim2.new(0, 0, 0, 350)
+Footer.Size = UDim2.new(1, 0, 0, 20)
+Footer.Font = Enum.Font.SourceSansSemibold
+Footer.Text = "@kimungs"
+Footer.TextColor3 = Color3.fromRGB(164, 176, 190)
+Footer.TextSize = 13
+
+-- Tombol Silang (X) Untuk Menutup Menu
+CloseButton.Parent = MainFrame
+CloseButton.BackgroundTransparency = 1
+CloseButton.Position = UDim2.new(1, -25, 0, 10)
+CloseButton.Size = UDim2.new(0, 15, 0, 15)
+CloseButton.Font = Enum.Font.SourceSansBold
+CloseButton.Text = "X"
+CloseButton.TextColor3 = Color3.fromRGB(127, 140, 141)
+CloseButton.TextSize = 14
+
+CloseButton.MouseButton1Click:Connect(function()
+    ScreenGui:Destroy()
+end)
+
+-- Fungsi Perhitungan Matematika Real-Time (Logika Sama dengan <script> HTML)
+local function hitungHarga()
+    local hargaAwal = tonumber(InputHarga.Text)
+    local xAwal = tonumber(InputX.Text)
+    local xTarget = tonumber(InputTarget.Text)
+    
+    if hargaAwal and xAwal and xTarget and xAwal > 0 then
+        local hargaDasar = hargaAwal / xAwal
+        local hargaTarget = hargaDasar * xTarget
+        ResultValue.Text = string.format("%.2f", hargaTarget)
+    else
+        ResultValue.Text = "Input Salah"
+    end
+end
+
+-- Menghubungkan Event Input dengan Fungsi Perhitungan Real-Time
+InputHarga:GetPropertyChangedSignal("Text"):Connect(hitungHarga)
+InputX:GetPropertyChangedSignal("Text"):Connect(hitungHarga)
+InputTarget:GetPropertyChangedSignal("Text"):Connect(hitungHarga)
+
+-- Eksekusi Perhitungan Awal Saat Aplikasi Pertama Dimuat
+hitungHarga()
