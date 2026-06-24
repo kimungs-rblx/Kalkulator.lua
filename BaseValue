@@ -17,77 +17,84 @@ local ResultTitle = Instance.new("TextLabel")
 local ResultValue = Instance.new("TextLabel")
 local LeftBorder = Instance.new("Frame")
 
--- Teks Footer @kimungs & Tombol Close
+-- Teks Footer @kimungs
 local Footer = Instance.new("TextLabel")
+
+-- Tombol Kontrol Atas (Close & Minimize)
 local CloseButton = Instance.new("TextButton")
+local MinimizeButton = Instance.new("TextButton")
+
+-- Tombol Ikon Discord (Saat Menyusut)
+local DiscordButton = Instance.new("ImageButton")
+local DiscordCorner = Instance.new("UICorner")
 
 -- Mengarahkan ke PlayerGui agar kompatibel dengan Delta Mobile
-ScreenGui.Name = "KalkulatorBaseValueFix"
+ScreenGui.Name = "KalkulatorBaseValueMini"
 ScreenGui.Parent = game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui")
 ScreenGui.ResetOnSpawn = false
 
--- Properti Frame Utama (Responsif Mobile)
+-- 🛠️ PERKECIL UKURAN UTAMA (Setengah dari ukuran awal, proporsi 1x1 lebih pas)
 MainFrame.Name = "MainFrame"
 MainFrame.Parent = ScreenGui
 MainFrame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-MainFrame.Position = UDim2.new(0.5, -135, 0.5, -200)
-MainFrame.Size = UDim2.new(0, 270, 0, 400)
+MainFrame.Position = UDim2.new(0.5, -75, 0.5, -110)
+MainFrame.Size = UDim2.new(0, 150, 0, 220) -- Diperkecil 1/2 dari awal
 MainFrame.Active = true
-MainFrame.Draggable = true -- Bisa digeser di layar HP Anda
+MainFrame.Draggable = true -- Bisa digeser di layar HP
 
-UICorner.CornerRadius = UDim.new(0, 12)
+UICorner.CornerRadius = UDim.new(0, 8)
 UICorner.Parent = MainFrame
 
--- Judul Utama (h2)
+-- Judul Utama (h2) - Ukuran Teks Disesuaikan
 Title.Parent = MainFrame
 Title.BackgroundTransparency = 1
-Title.Position = UDim2.new(0, 0, 0, 15)
-Title.Size = UDim2.new(1, 0, 0, 25)
+Title.Position = UDim2.new(0, 0, 0, 8)
+Title.Size = UDim2.new(1, 0, 0, 16)
 Title.Font = Enum.Font.SourceSansBold
 Title.Text = "🍎 Kalkulator Base Value"
 Title.TextColor3 = Color3.fromRGB(231, 76, 60)
-Title.TextSize = 20
+Title.TextSize = 12
 
 -- Subjudul (desc)
 Subtitle.Parent = MainFrame
 Subtitle.BackgroundTransparency = 1
-Subtitle.Position = UDim2.new(0, 10, 0, 40)
-Subtitle.Size = UDim2.new(1, -20, 0, 20)
+Subtitle.Position = UDim2.new(0, 5, 0, 24)
+Subtitle.Size = UDim2.new(1, -10, 0, 12)
 Subtitle.Font = Enum.Font.SourceSans
-Subtitle.Text = "Menghitung base value secara otomatis."
+Subtitle.Text = "Menghitung otomatis."
 Subtitle.TextColor3 = Color3.fromRGB(127, 140, 141)
-Subtitle.TextSize = 12
+Subtitle.TextSize = 9
 
--- Fungsi Pembantu untuk Membuat Form Input sesuai Desain CSS HTML
+-- Fungsi Pembantu Membuat Input Form Mini
 local function createInputField(labelName, defaultVal, posY)
     local label = Instance.new("TextLabel")
     label.Parent = MainFrame
     label.BackgroundTransparency = 1
-    label.Position = UDim2.new(0, 20, 0, posY)
-    label.Size = UDim2.new(1, -40, 0, 15)
+    label.Position = UDim2.new(0, 12, 0, posY)
+    label.Size = UDim2.new(1, -24, 0, 10)
     label.Font = Enum.Font.SourceSansBold
     label.Text = labelName
     label.TextColor3 = Color3.fromRGB(44, 62, 80)
-    label.TextSize = 13
+    label.TextSize = 9
     label.TextXAlignment = Enum.TextXAlignment.Left
 
     local input = Instance.new("TextBox")
     input.Parent = MainFrame
     input.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-    input.Position = UDim2.new(0, 20, 0, posY + 18)
-    input.Size = UDim2.new(1, -40, 0, 30)
+    input.Position = UDim2.new(0, 12, 0, posY + 12)
+    input.Size = UDim2.new(1, -24, 0, 18)
     input.Font = Enum.Font.SourceSans
     input.Text = defaultVal
     input.TextColor3 = Color3.fromRGB(44, 62, 80)
-    input.TextSize = 15
+    input.TextSize = 10
     
     local inputCorner = Instance.new("UICorner")
-    inputCorner.CornerRadius = UDim.new(0, 6)
+    inputCorner.CornerRadius = UDim.new(0, 4)
     inputCorner.Parent = input
 
     local stroke = Instance.new("UIStroke")
     stroke.Color = Color3.fromRGB(220, 221, 225)
-    stroke.Thickness = 1.5
+    stroke.Thickness = 1
     stroke.Parent = input
 
     input.Focused:Connect(function() stroke.Color = Color3.fromRGB(231, 76, 60) end)
@@ -96,70 +103,106 @@ local function createInputField(labelName, defaultVal, posY)
     return input
 end
 
--- Membuat Elemen Input Form (Sesuai Struktur HTML Anda)
-InputHarga = createInputField("Value Inventory :", "1000", 75)
-InputX = createInputField("Value X Saat Ini :", "0.50", 135)
-InputTarget = createInputField("Base Value X1 :", "1", 205)
+-- Elemen Input Form (Tata letak Y disesuaikan)
+InputHarga = createInputField("Value Inventory :", "1000", 42)
+InputX = createInputField("Value X Saat Ini :", "0.50", 76)
+InputTarget = createInputField("Base Value X1 :", "1", 110)
 
--- Pengaturan Kotak Hasil (Result Box)
+-- Kotak Hasil (Result Box) Merah Muda Mini
 ResultBox.Parent = MainFrame
 ResultBox.BackgroundColor3 = Color3.fromRGB(255, 245, 245)
-ResultBox.Position = UDim2.new(0, 20, 0, 270)
-ResultBox.Size = UDim2.new(1, -40, 0, 60)
+ResultBox.Position = UDim2.new(0, 12, 0, 146)
+ResultBox.Size = UDim2.new(1, -24, 0, 36)
 
-ResultCorner.CornerRadius = UDim.new(0, 4)
+ResultCorner.CornerRadius = UDim.new(0, 3)
 ResultCorner.Parent = ResultBox
 
 LeftBorder.Parent = ResultBox
 LeftBorder.BackgroundColor3 = Color3.fromRGB(231, 76, 60)
-LeftBorder.Size = UDim2.new(0, 4, 1, 0)
+LeftBorder.Size = UDim2.new(0, 2, 1, 0)
 LeftBorder.BorderSizePixel = 0
 
 ResultTitle.Parent = ResultBox
 ResultTitle.BackgroundTransparency = 1
-ResultTitle.Position = UDim2.new(0, 12, 0, 8)
-ResultTitle.Size = UDim2.new(1, -20, 0, 12)
+ResultTitle.Position = UDim2.new(0, 8, 0, 4)
+ResultTitle.Size = UDim2.new(1, -16, 0, 8)
 ResultTitle.Font = Enum.Font.SourceSansBold
 ResultTitle.Text = "TOTAL BASE VALUE X1"
 ResultTitle.TextColor3 = Color3.fromRGB(127, 140, 141)
-ResultTitle.TextSize = 11
+ResultTitle.TextSize = 7
 ResultTitle.TextXAlignment = Enum.TextXAlignment.Left
 
 ResultValue.Parent = ResultBox
 ResultValue.BackgroundTransparency = 1
-ResultValue.Position = UDim2.new(0, 12, 0, 22)
-ResultValue.Size = UDim2.new(1, -20, 0, 30)
+ResultValue.Position = UDim2.new(0, 8, 0, 14)
+ResultValue.Size = UDim2.new(1, -16, 0, 18)
 ResultValue.Font = Enum.Font.SourceSansBold
 ResultValue.Text = "2000.00"
 ResultValue.TextColor3 = Color3.fromRGB(231, 76, 60)
-ResultValue.TextSize = 22
+ResultValue.TextSize = 14
 ResultValue.TextXAlignment = Enum.TextXAlignment.Left
 
 -- Teks Footer @kimungs
 Footer.Parent = MainFrame
 Footer.BackgroundTransparency = 1
-Footer.Position = UDim2.new(0, 0, 0, 350)
-Footer.Size = UDim2.new(1, 0, 0, 20)
+Footer.Position = UDim2.new(0, 0, 0, 192)
+Footer.Size = UDim2.new(1, 0, 0, 15)
 Footer.Font = Enum.Font.SourceSansSemibold
 Footer.Text = "@kimungs"
 Footer.TextColor3 = Color3.fromRGB(164, 176, 190)
-Footer.TextSize = 13
+Footer.TextSize = 10
 
--- Tombol Silang (X) Untuk Menutup Menu
+-- 🛠️ TOMBOL MINIMIZE (_)
+MinimizeButton.Parent = MainFrame
+MinimizeButton.BackgroundTransparency = 1
+MinimizeButton.Position = UDim2.new(1, -34, 0, 6)
+MinimizeButton.Size = UDim2.new(0, 12, 0, 12)
+MinimizeButton.Font = Enum.Font.SourceSansBold
+MinimizeButton.Text = "_"
+MinimizeButton.TextColor3 = Color3.fromRGB(127, 140, 141)
+MinimizeButton.TextSize = 11
+
+-- 🛠️ TOMBOL TUTUP SCRIPT (X)
 CloseButton.Parent = MainFrame
 CloseButton.BackgroundTransparency = 1
-CloseButton.Position = UDim2.new(1, -25, 0, 10)
-CloseButton.Size = UDim2.new(0, 15, 0, 15)
+CloseButton.Position = UDim2.new(1, -18, 0, 7)
+CloseButton.Size = UDim2.new(0, 12, 0, 12)
 CloseButton.Font = Enum.Font.SourceSansBold
 CloseButton.Text = "X"
 CloseButton.TextColor3 = Color3.fromRGB(127, 140, 141)
-CloseButton.TextSize = 14
+CloseButton.TextSize = 11
 
+-- 🛠️ TOMBOL IKON DISCORD (Saat Menu Dikecilkan seukuran jari)
+DiscordButton.Name = "DiscordButton"
+DiscordButton.Parent = ScreenGui
+DiscordButton.BackgroundColor3 = Color3.fromRGB(88, 101, 242)
+DiscordButton.Position = UDim2.new(0.5, -20, 0.5, -20)
+DiscordButton.Size = UDim2.new(0, 40, 0, 40) -- Seukuran ujung jari telunjuk mobile
+DiscordButton.Image = "rbxassetid://123273397941031" -- ID Aset Resmi Logo Discord di Roblox
+DiscordButton.Visible = false
+DiscordButton.Active = true
+DiscordButton.Draggable = true -- Ikon Discord bisa digeser bebas di layar HP
+
+DiscordCorner.CornerRadius = UDim.new(0, 10)
+DiscordCorner.Parent = DiscordButton
+
+-- LOGIKA EVENT TOMBOL
 CloseButton.MouseButton1Click:Connect(function()
-    ScreenGui:Destroy()
+    ScreenGui:Destroy() -- Menutup total skrip dari permainan
 end)
 
--- Fungsi Perhitungan Matematika Real-Time (Logika Sama dengan <script> HTML)
+MinimizeButton.MouseButton1Click:Connect(function()
+    MainFrame.Visible = false
+    DiscordButton.Position = MainFrame.Position + UDim2.new(0, 55, 0, 90) -- Menempatkan ikon di lokasi menu terakhir
+    DiscordButton.Visible = true
+end)
+
+DiscordButton.MouseButton1Click:Connect(function()
+    DiscordButton.Visible = false
+    MainFrame.Visible = true
+end)
+
+-- LOGIKA KALKULASI REAL-TIME
 local function hitungHarga()
     local hargaAwal = tonumber(InputHarga.Text)
     local xAwal = tonumber(InputX.Text)
@@ -174,10 +217,9 @@ local function hitungHarga()
     end
 end
 
--- Menghubungkan Event Input dengan Fungsi Perhitungan Real-Time
 InputHarga:GetPropertyChangedSignal("Text"):Connect(hitungHarga)
 InputX:GetPropertyChangedSignal("Text"):Connect(hitungHarga)
 InputTarget:GetPropertyChangedSignal("Text"):Connect(hitungHarga)
 
--- Eksekusi Perhitungan Awal Saat Aplikasi Pertama Dimuat
 hitungHarga()
+
